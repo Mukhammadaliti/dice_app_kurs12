@@ -1,18 +1,13 @@
 import 'dart:developer' as math;
 import 'dart:math';
+import 'package:get/get.dart';
 
+import 'package:dice_app_kurs12/controller/dice_controller.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  DiceController _controller = Get.put(DiceController());
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int solDice = 4;
-  int onDice = 2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,33 +23,26 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: InkWell(
-                  onTap: () {
-                    setState(() {});
-                    final random1 = Random().nextInt(6) + 1;
-                    final random2 = Random().nextInt(6) + 1;
-
-                    solDice = random1;
-                    onDice = random2;
-                    math.log('Sol jak basilip atat');
-                  },
-                  child: Image.asset(
-                    'assets/images/dice$solDice.png',
-                  ),
-                ),
+                    onTap: () {
+                      _controller.solDice.value = Random().nextInt(6) + 1;
+                      _controller.onDice.value = Random().nextInt(6) + 1;
+                      math.log('Sol jak basilip atat');
+                    },
+                    child: Obx(() => Image.asset(
+                          'assets/images/dice${_controller.solDice}.png',
+                        ))),
               ),
             ),
             Expanded(
-              child: SizedBox(
-                height: 170,
-                width: 170,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      onDice = Random().nextInt(6) + 1;
-                      solDice = Random().nextInt(6) + 1;
-                    });
+                    _controller.onDice.value = Random().nextInt(6) + 1;
+                    _controller.solDice.value = Random().nextInt(6) + 1;
                   },
-                  child: Image.asset('assets/images/dice$onDice.png'),
+                  child: Obx(() => Image.asset(
+                      'assets/images/dice${_controller.onDice}.png')),
                 ),
               ),
             ),
